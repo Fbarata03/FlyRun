@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import com.example.flyrun.R
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.isSystemInDarkTheme
 import com.example.flyrun.controller.Navigator
 import com.example.flyrun.model.Game
 import com.example.flyrun.model.GameId
@@ -229,32 +230,34 @@ fun GameHeaderBanner(game: Game, height: androidx.compose.ui.unit.Dp) {
 
 
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewItemRow() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         ItemRow(
             item = PurchasableItem(
                 name = "Pacote de Liveries das Equipas",
                 price = "$12.99",
                 description = "Desbloqueie liveries exclusivas para todas as equipas oficiais.",
-                iconRes = R.drawable.ic_item_f1_livery
+                iconRes = R.drawable.ic_item_f1_livery,
+                imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.dm2n1Y3J1UhMiJvwVwiqdQHaHg%3Fpid%3DApi&f=1&ipt=335b97bed18626fd223c2db4d3f725f388c7799bdf61957c36505bffbc7ef5f8&ipo=images"
             ),
             onClick = {}
         )
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewPurchaseSheet() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         PurchaseSheet(
             item = PurchasableItem(
                 name = "Pacote de Equipamento do Piloto",
                 price = "$11.99",
                 description = "Personalize o seu piloto com equipamento oficial das equipas.",
-                iconRes = R.drawable.ic_item_rider_gear
+                iconRes = R.drawable.ic_item_rider_gear,
+                imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.oXzPOrAByH4KZythfAJIXAHaHa%3Fpid%3DApi&f=1&ipt=0ff2e54a80bd7f7a65d7a5ea27b00941f5bcbd208c72eca156d3b9f8d244fb12&ipo=images"
             ),
             onBuy = {},
             onCancel = {}
@@ -262,35 +265,55 @@ fun PreviewPurchaseSheet() {
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewGameDetailScreen() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         val g = Game(
             id = GameId.F1,
             title = "Fórmula 1®",
             description = "A official Formula 1 racing experience with all teams, drivers and circuits.",
             items = listOf(
-                PurchasableItem("Pacote de Liveries das Equipas", "$12.99", "Desbloqueie liveries exclusivas para todas as equipas oficiais.", R.drawable.ic_item_f1_livery),
-                PurchasableItem("Expansão Carros Clássicos", "$9.99", "Conduza carros lendários da era dourada da F1.", R.drawable.ic_item_classic_car),
-                PurchasableItem("DLC Circuitos Históricos", "$14.99", "Corra em pistas icónicas como Mónaco, Spa e Suzuka.", R.drawable.ic_item_circuit)
-            )
+                PurchasableItem(
+                    "Pacote de Pinturas das Equipes",
+                    "$12.99",
+                    "Liveries oficiais com cores e logotipos das equipas.",
+                    R.drawable.ic_f1_liveries,
+                    imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.dm2n1Y3J1UhMiJvwVwiqdQHaHg%3Fpid%3DApi&f=1&ipt=335b97bed18626fd223c2db4d3f725f388c7799bdf61957c36505bffbc7ef5f8&ipo=images"
+                ),
+                PurchasableItem(
+                    "Expansão de Carros Clássicos",
+                    "$9.99",
+                    "Carros lendários de eras históricas da F1.",
+                    R.drawable.ic_f1_classic_cars,
+                    imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.0Bw6i2MK6DCvDNY6h4Iu9QHaDr%3Fpid%3DApi&f=1&ipt=4b3eb04c2f38dd574422e7c27c84660478df87cd8b7822c2666fc07cb3990917&ipo=images"
+                ),
+                PurchasableItem(
+                    "DLC de Circuitos Históricos",
+                    "$14.99",
+                    "Pistas icónicas com traçados clássicos.",
+                    R.drawable.ic_f1_historic_tracks,
+                    imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.3gArMKB2njiEbDGC0xdKLwHaFj%3Fpid%3DApi&f=1&ipt=cbb4600187bcd1773be1cec1415b28ea393102c1f5e619bb4e7cb2d4f6f1edcc&ipo=images"
+                )
+            ),
+            coverUrl = "https://images.unsplash.com/photo-1625905928324-577cf7f94ac4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGZvcm11bGElMjAxfGVufDB8fDB8fHww"
         )
         GameDetailScreen(game = g, onBack = {})
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewGameHeaderBanner() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         val g = Game(
             id = GameId.MotoGP,
             title = "MotoGP™",
             description = "",
             items = listOf(
                 PurchasableItem("Pacote de Equipamento do Piloto", "$11.99", "Personalize o seu piloto com equipamento oficial das equipas.", R.drawable.ic_item_rider_gear)
-            )
+            ),
+            coverUrl = "https://images.unsplash.com/photo-1761092993666-31d06bf8da2e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDd8fG1vdG9ncHxlbnwwfHwwfHx8MA%3D%3D"
         )
         GameHeaderBanner(game = g, height = 180.dp)
     }

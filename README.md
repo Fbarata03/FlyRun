@@ -1,11 +1,11 @@
-# 🏁 FlyRun – Loja de Itens para Jogos
+#  FlyRun – Loja de Itens para Jogos
 
 Aplicação móvel desenvolvida como projeto da disciplina de **Programação para Dispositivos Móveis**, seguindo rigorosamente as diretrizes do enunciado E01. O app simula uma loja digital para compra de conteúdos adicionais (DLCs, expansões e itens cosméticos) para dois jogos de corrida: **Fórmula 1®** e **MotoGP™**.
 
 
 ---
 
-## 📱 Funcionalidades
+##  Funcionalidades
 
 - **Tela inicial (`MainActivity`)**: lista de jogos em cards.
 - **Tela de detalhes (`GameDetailActivity`)**: exibe informações do jogo e lista de itens compráveis.
@@ -17,14 +17,14 @@ Aplicação móvel desenvolvida como projeto da disciplina de **Programação pa
 
 ---
 
-## 🎮 Jogos e Itens Disponíveis
+## Jogos e Itens Disponíveis
 
-### 🏎️ Fórmula 1®
+###  Fórmula 1®
 1. **Pacote de Pinturas das Equipes** – $12,99  
 2. **Expansão de Carros Clássicos** – $9,99  
 3. **DLC de Circuitos Históricos** – $14,99  
 
-### 🏍️ MotoGP™
+###  MotoGP™
 1. **Pacote de Equipamento do Piloto** – $11,99  
 2. **Coleção de Motos Clássicas** – $8,99  
 3. **Expansão de Circuitos do GP** – $15,99  
@@ -32,7 +32,7 @@ Aplicação móvel desenvolvida como projeto da disciplina de **Programação pa
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - **Linguagem**: Kotlin
 - **UI Toolkit**: Jetpack Compose
@@ -43,7 +43,7 @@ Aplicação móvel desenvolvida como projeto da disciplina de **Programação pa
 
 ---
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 app/
 ├── src/main/java/

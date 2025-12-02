@@ -60,6 +60,7 @@ import com.example.flyrun.model.PurchasableItem
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.isSystemInDarkTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -320,10 +321,10 @@ private fun sampleGames(): List<Game> {
 
 
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewGameCard() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         val game = sampleGames().first()
         GameCard(
             data = GameCardData(
@@ -337,42 +338,42 @@ fun PreviewGameCard() {
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewMainScreen() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         MainScreen(games = sampleGames(), onOpenGame = {})
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewGamesList() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         GamesList(modifier = Modifier, games = sampleGames(), onOpenGame = {})
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewPlaceholderTab() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         PlaceholderTab(Modifier)
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewTopBar() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         FlyRunTopBar()
     }
 }
 
-@Preview(showBackground = true)
+@FlyRunPreviews
 @Composable
 fun PreviewBottomNav() {
-    FlyRunTheme(dark = true) {
+    FlyRunTheme(dark = isSystemInDarkTheme()) {
         FlyRunBottomNav(selectedIndex = 0, onSelect = {})
     }
 }

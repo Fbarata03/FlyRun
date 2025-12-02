@@ -10,6 +10,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import android.content.res.Configuration
+import androidx.compose.ui.tooling.preview.Preview
 
 private val Black = Color(0xFF000000)
 private val F1Red = Color(0xFFC80000)
@@ -67,4 +69,8 @@ fun FlyRunTheme(dark: Boolean = true, content: @Composable () -> Unit) {
     val colors = if (dark) DarkColorScheme else LightColorScheme
     MaterialTheme(colorScheme = colors, typography = AppTypography, content = content)
 }
+
+@Preview(name = "Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+annotation class FlyRunPreviews
 
