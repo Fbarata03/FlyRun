@@ -1,4 +1,4 @@
-package com.example.flyrun.view
+package com.example.flyrun.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -73,4 +73,8 @@ fun FlyRunTheme(dark: Boolean = true, content: @Composable () -> Unit) {
 @Preview(name = "Light", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 annotation class FlyRunPreviews
+
+@Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+annotation class DarkPreview
+
 

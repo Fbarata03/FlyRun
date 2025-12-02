@@ -1,4 +1,5 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.flyrun.view
 
 import android.os.Bundle
@@ -27,7 +28,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,10 +57,13 @@ import com.example.flyrun.controller.Navigator
 import com.example.flyrun.model.Game
 import com.example.flyrun.model.GameId
 import com.example.flyrun.model.PurchasableItem
-import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.platform.LocalInspectionMode
+import com.example.flyrun.ui.theme.DarkPreview
+import com.example.flyrun.ui.theme.FlyRunTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,10 +142,30 @@ fun GameCard(data: GameCardData, onOpenGame: (Game) -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            if (data.game.coverUrl != null) {
-                AsyncImage(model = data.game.coverUrl, contentDescription = data.title, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-            } else {
-                Box(modifier = Modifier.fillMaxSize().background(data.gradient))
+            when {
+                data.game.coverRes != null -> {
+                    Image(
+                        painter = painterResource(data.game.coverRes),
+                        contentDescription = data.title,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                data.game.coverUrl != null -> {
+                    AsyncImage(
+                        model = data.game.coverUrl,
+                        contentDescription = data.title,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                else -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(data.gradient)
+                    )
+                }
             }
             Box(
                 modifier = Modifier
@@ -155,7 +178,13 @@ fun GameCard(data: GameCardData, onOpenGame: (Game) -> Unit) {
                     .padding(12.dp)
                     .size(40.dp),
                 contentAlignment = Alignment.Center
-            ) { Icon(painterResource(data.iconRes), contentDescription = data.title, tint = Color.Unspecified) }
+            ) {
+                Icon(
+                    painterResource(data.iconRes),
+                    contentDescription = data.title,
+                    tint = Color.Unspecified
+                )
+            }
             Text(
                 text = data.title,
                 color = Color.White,
@@ -176,27 +205,37 @@ fun AsyncImage(
     contentScale: ContentScale
 ) {
     val bitmapState = remember { mutableStateOf<Bitmap?>(null) }
+    val isPreview = LocalInspectionMode.current
 
-    LaunchedEffect(model) {
-        val url = model
-        bitmapState.value = try {
-            withContext(Dispatchers.IO) {
-                val connection = URL(url).openConnection() as HttpURLConnection
-                connection.connectTimeout = 5000
-                connection.readTimeout = 5000
-                connection.instanceFollowRedirects = true
-                connection.inputStream.use { stream ->
-                    BitmapFactory.decodeStream(stream)
+    LaunchedEffect(model, isPreview) {
+        if (isPreview) {
+            bitmapState.value = null
+        } else {
+            val url = model
+            bitmapState.value = try {
+                withContext(Dispatchers.IO) {
+                    val connection = URL(url).openConnection() as HttpURLConnection
+                    connection.connectTimeout = 5000
+                    connection.readTimeout = 5000
+                    connection.instanceFollowRedirects = true
+                    connection.inputStream.use { stream ->
+                        BitmapFactory.decodeStream(stream)
+                    }
                 }
+            } catch (e: Exception) {
+                null
             }
-        } catch (e: Exception) {
-            null
         }
     }
 
     val bmp = bitmapState.value
     if (bmp != null) {
-        Image(bitmap = bmp.asImageBitmap(), contentDescription = contentDescription, modifier = modifier, contentScale = contentScale)
+        Image(
+            bitmap = bmp.asImageBitmap(),
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = contentScale
+        )
     } else {
         Box(modifier = modifier.background(Color.Black.copy(alpha = 0.1f)))
     }
@@ -213,14 +252,26 @@ fun FlyRunTopBar() {
                     .size(32.dp)
                     .background(Color.White.copy(alpha = 0.2f), RectangleShape),
                 contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.ic_bell), contentDescription = "Notificações", tint = Color.White) }
+            ) {
+                Icon(
+                    painterResource(R.drawable.ic_bell),
+                    contentDescription = "Notificações",
+                    tint = Color.White
+                )
+            }
             Box(
                 modifier = Modifier
                     .padding(end = 12.dp)
                     .size(32.dp)
                     .background(Color.White.copy(alpha = 0.2f), RectangleShape),
                 contentAlignment = Alignment.Center
-            ) { Icon(painterResource(R.drawable.ic_settings), contentDescription = "Configurações", tint = Color.White) }
+            ) {
+                Icon(
+                    painterResource(R.drawable.ic_settings),
+                    contentDescription = "Configurações",
+                    tint = Color.White
+                )
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
@@ -261,84 +312,74 @@ private fun sampleGames(): List<Game> {
             name = "Pacote de Pinturas das Equipes",
             price = "$12.99",
             description = "Liveries oficiais com cores e logotipos das equipas.",
-            iconRes = R.drawable.ic_f1_liveries,
-            imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.dm2n1Y3J1UhMiJvwVwiqdQHaHg%3Fpid%3DApi&f=1&ipt=335b97bed18626fd223c2db4d3f725f388c7799bdf61957c36505bffbc7ef5f8&ipo=images"
+            iconRes = R.drawable.pacotedasequipes,
+            imageUrl = null
         ),
         PurchasableItem(
             name = "Expansão de Carros Clássicos",
             price = "$9.99",
             description = "Carros lendários de eras históricas da F1.",
-            iconRes = R.drawable.ic_f1_classic_cars,
-            imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.0Bw6i2MK6DCvDNY6h4Iu9QHaDr%3Fpid%3DApi&f=1&ipt=4b3eb04c2f38dd574422e7c27c84660478df87cd8b7822c2666fc07cb3990917&ipo=images"
+            iconRes = R.drawable.carroclassico,
+            imageUrl = null
         ),
         PurchasableItem(
             name = "DLC de Circuitos Históricos",
             price = "$14.99",
             description = "Pistas icónicas com traçados clássicos.",
-            iconRes = R.drawable.ic_f1_historic_tracks,
-            imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.3gArMKB2njiEbDGC0xdKLwHaFj%3Fpid%3DApi&f=1&ipt=cbb4600187bcd1773be1cec1415b28ea393102c1f5e619bb4e7cb2d4f6f1edcc&ipo=images"
+            iconRes = R.drawable.dlcdecircuito,
+            imageUrl = null
         )
     )
+
     val motoItems = listOf(
         PurchasableItem(
             name = "Pacote de Equipamento do Piloto",
             price = "$11.99",
             description = "Fato com marcação e patrocínios oficiais.",
-            iconRes = R.drawable.ic_motogp_gear,
-            imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.oXzPOrAByH4KZythfAJIXAHaHa%3Fpid%3DApi&f=1&ipt=0ff2e54a80bd7f7a65d7a5ea27b00941f5bcbd208c72eca156d3b9f8d244fb12&ipo=images"
+            iconRes = R.drawable.pacotedeequipamento,
+            imageUrl = null
         ),
         PurchasableItem(
             name = "Coleção de Motos Clássicas",
             price = "$8.99",
             description = "Motos vintage de temporadas memoráveis.",
-            iconRes = R.drawable.ic_motogp_vintage_bikes,
-            imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.osLzqfe172Crb6beUHxG6gHaE7%3Fpid%3DApi&f=1&ipt=2b71de9420bcb0db0c4c56efd54638a1e867f3ae08d36efe9e02422cd05864cc&ipo=images"
+            iconRes = R.drawable.colesaodemotos,
+            imageUrl = null
         ),
         PurchasableItem(
             name = "Expansão de Circuitos do GP",
             price = "$15.99",
             description = "Circuitos emblemáticos de Grandes Prémios.",
-            iconRes = R.drawable.ic_motogp_tracks,
-            imageUrl = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.g7jo7xylva3FgaBYElsckwHaEp%3Fpid%3DApi&f=1&ipt=17dbce69b76dca27f53fe072f02b2daaa162fae36d0837fd5df683c795021a07&ipo=images"
+            iconRes = R.drawable.expansaodo,
+            imageUrl = null
         )
     )
+
     val f1 = Game(
         id = GameId.F1,
         title = "Fórmula 1®",
         description = "A official Formula 1 racing experience with all teams, drivers and circuits.",
         items = f1Items,
-        coverUrl = "https://images.unsplash.com/photo-1625905928324-577cf7f94ac4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGZvcm11bGElMjAxfGVufDB8fDB8fHww"
+        coverUrl = null,
+        coverRes = R.drawable.formula01
     )
+
     val moto = Game(
         id = GameId.MotoGP,
         title = "MotoGP™",
         description = "",
         items = motoItems,
-        coverUrl = "https://images.unsplash.com/photo-1761092993666-31d06bf8da2e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDd8fG1vdG9ncHxlbnwwfHwwfHx8MA%3D%3D"
+        coverUrl = null,
+        coverRes = R.drawable.motogp0
     )
+
     return listOf(f1, moto)
 }
 
 
+ 
 
-@FlyRunPreviews
-@Composable
-fun PreviewGameCard() {
-    FlyRunTheme(dark = isSystemInDarkTheme()) {
-        val game = sampleGames().first()
-        GameCard(
-            data = GameCardData(
-                title = game.title,
-                gradient = Brush.linearGradient(listOf(Color(0xFF3A3A3A), Color(0xFFC80000))),
-                iconRes = R.drawable.ic_badge_f1,
-                game = game
-            ),
-            onOpenGame = {}
-        )
-    }
-}
-
-@FlyRunPreviews
+@DarkPreview
 @Composable
 fun PreviewMainScreen() {
     FlyRunTheme(dark = isSystemInDarkTheme()) {
@@ -346,23 +387,10 @@ fun PreviewMainScreen() {
     }
 }
 
-@FlyRunPreviews
-@Composable
-fun PreviewGamesList() {
-    FlyRunTheme(dark = isSystemInDarkTheme()) {
-        GamesList(modifier = Modifier, games = sampleGames(), onOpenGame = {})
-    }
-}
 
-@FlyRunPreviews
-@Composable
-fun PreviewPlaceholderTab() {
-    FlyRunTheme(dark = isSystemInDarkTheme()) {
-        PlaceholderTab(Modifier)
-    }
-}
 
-@FlyRunPreviews
+
+@DarkPreview
 @Composable
 fun PreviewTopBar() {
     FlyRunTheme(dark = isSystemInDarkTheme()) {
@@ -370,7 +398,7 @@ fun PreviewTopBar() {
     }
 }
 
-@FlyRunPreviews
+@DarkPreview
 @Composable
 fun PreviewBottomNav() {
     FlyRunTheme(dark = isSystemInDarkTheme()) {

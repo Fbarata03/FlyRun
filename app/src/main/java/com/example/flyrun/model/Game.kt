@@ -1,6 +1,5 @@
 package com.example.flyrun.model
 
-import com.example.flyrun.R
 import java.io.Serializable
 
 data class PurchasableItem(
@@ -18,7 +17,7 @@ data class Game(
     val title: String,
     val description: String,
     val items: List<PurchasableItem>,
-    val coverUrl: String? = null
+    val coverUrl: String? = null,
+    val coverRes: Int? = null
 ) : Serializable
 
-object GameRepository
